@@ -1,4 +1,3 @@
-This is basic cpp code to calculate sha256 hash without using any header. The hash produces has been compared to hash produced 
-using openssl/sha.h and both result is equal. The code is intended written without using any header for optimization.
+This code intended to demonstrate the calculation of sha256 hash on CPU without using any header. the code quite basic and not optimized for production and may contain bug's. however it successfully calculate hash of given input equivalent to hash produced by openssl/sha.h library.
 
-You may modify the data[] passed to the sha256 kernal for calculating the hashed.
+This code take hard code input into unsigned char array and calculate hash. user may rework the input section in order to use this code with user program. Please note that this sha256 has is calculated by taking ASCII binary number of the input character. for binary hash, user need to convert each hex character to its binary value before calculate hash of the input data.
