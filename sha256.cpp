@@ -153,7 +153,9 @@ void add_to_data_length(unsigned long n) {
 void write_data_bit_length(unsigned char* begin) {
 
     unsigned long data_bit_length_digits[4];
-    std::copy(data_length_digits_, data_length_digits_ + 4, data_bit_length_digits);
+        for (int i = 0; i < 4; ++i) {
+        data_bit_length_digits[i] = data_length_digits_[i];
+    }
 
     // convert byte length to bit length (multiply 8 or shift 3 times left)
     unsigned long carry = 0;
@@ -186,19 +188,31 @@ void get_hash_bytes(unsigned char* data_start, unsigned char* data_end) {
 void SHA256_Init() {
     buffer_size_ = 0;
     buffer_ = nullptr;
-    std::fill(data_length_digits_, data_length_digits_ + 4, 0ul);
-    std::copy(initial_message_digest, initial_message_digest + 8, h_);
+    
+    for (int i = 0; i < 4; ++i) {
+        data_length_digits_[i] = 0ul;
+    }
+
+    for (int i = 0; i < 8; ++i) {
+        h_[i] = initial_message_digest[i];
+    }
 }
 
 
 void SHA256_Process(const unsigned char* data_start, const unsigned char* data_end) {
 
-    const unsigned int length = static_cast<unsigned int>(std::distance(data_start, data_end));
+    const unsigned int length = static_cast<unsigned int>(data_end - data_start);
     add_to_data_length(static_cast<unsigned long>(length));
 
     unsigned char* new_buffer = new unsigned char[buffer_size_ + length];
-    std::copy(buffer_, buffer_ + buffer_size_, new_buffer);
-    std::copy(data_start, data_end, new_buffer + buffer_size_);
+    for (int i = 0; i < buffer_size_; ++i) {
+        new_buffer[i] = buffer_[i];
+    }
+
+    int data_length = data_end - data_start;
+    for (int i = 0; i < data_length; ++i) {
+        new_buffer[buffer_size_ + i] = data_start[i];
+    }
 
     delete[] buffer_;
     buffer_ = new_buffer;
@@ -210,27 +224,40 @@ void SHA256_Process(const unsigned char* data_start, const unsigned char* data_e
     }
 
     buffer_size_ -= i;
-    std::memmove(buffer_, buffer_ + i, buffer_size_);
+    for (int j = 0; j < buffer_size_; ++j) {
+        buffer_[j] = buffer_[j + i];
+    }
 }
 
 void SHA256_Finish() {
     
     unsigned char temp[64];
-    std::fill(temp, temp + 64, unsigned char(0));
+    for (int i = 0; i < 64; ++i) {
+        temp[i] = static_cast<unsigned char>(0);
+    }
 
     unsigned char remains = buffer_size_;
-    std::copy(buffer_, buffer_ + buffer_size_, temp);
+    for (int i = 0; i < buffer_size_; ++i) {
+        temp[i] = buffer_[i];
+    }
 
     // Add padding byte
     temp[remains] = 0x80;
 
     if (remains > 55) {
-        std::fill(temp + remains + 1, temp + 64, unsigned char(0)); //fill remaining buffer with 0ul
+        for (int i = remains + 1; i < 64; ++i) {
+            temp[i] = static_cast<unsigned char>(0);
+        }
+
         hash256_block(h_, temp);
-        std::fill(temp, temp + 64 - 4, unsigned char(0));
+        for (int i = 0; i < 64 - 4; ++i) {
+            temp[i] = static_cast<unsigned char>(0);
+        }
     }
     else {
-        std::fill(temp + remains + 1, temp + 64 - 4, unsigned char(0));
+        for (int i = remains + 1; i < 64 - 4; ++i) {
+            temp[i] = static_cast<unsigned char>(0);
+        }
     }
 
     write_data_bit_length(&(temp[56]));
