@@ -1,3 +1,3 @@
-This code intended to demonstrate the calculation of sha256 hash on CPU without using any header. the code quite basic and not optimized for production and may contain bug's. however it successfully calculate hash of given input equivalent to hash produced by openssl/sha.h library.
+This is sha256 implementation for CPU without using any header. all code is written here and suitable to be use in learning sha256. The code produce result equivalent to openssl header. 
 
-This code take hard code input into unsigned char array and calculate hash. user may rework the input section in order to use this code with user program. Please note that this sha256 has is calculated by taking ASCII binary number of the input character. for binary hash, user need to convert each hex character to its binary value before calculate hash of the input data.
+For the input, i have hard code it into the program, so you may rework on this section to use difference input. THis code take an ASCII input. for binary input, little modification is required to pass binary unsigned char to the code.
