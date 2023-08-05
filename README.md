@@ -1,3 +1,3 @@
-This is sha256 implementation for CPU without using any header. all code is written here and suitable to be use in learning sha256. The code produce result equivalent to openssl header. 
+This is from scratch sha256 implementation for CPU. This code not required any third party header / dll. This code suitable to be used as first stage in learning SHA256 algorithm on CPU. in this code, input data is preset in the code, you are welcome to made changes to take input data from program argument. In this build, data taken is in form of ASCII and not HEX binary. Changes is required to convert ASCII input string into binary unsigned char for binari SHA256 processing if required.
 
-For the input, i have hard code it into the program, so you may rework on this section to use difference input. THis code take an ASCII input. for binary input, little modification is required to pass binary unsigned char to the code.
+This code is intended to illustrate how SHA256 is calculated on CPU using Cpp without the need of third party library such as OpenSSL. However the code is not optimize for production enviroment. Use it at your own risk.
